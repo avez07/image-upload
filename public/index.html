@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.file-input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+form + form {
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="singleImageForm">
+            <label for="singleImage">Single Image</label>
+            <input type="file" class="file-input" id="singleImage" name="singleImage"/> <br/>
+            <label for="userName">User Name</label>
+            <input type="text" id="userName" name="userName" required /> <br/>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+        <br><br>
+        <form id="multipleImageForm">
+            <label for="multipleImage">Multiple Images</label>
+            <input type="file" class="file-input" id="multipleImage" name="multipleImage" multiple/> <br/>
+            <label for="userNameMultiple">User Name</label>
+            <input type="text" id="userNameMultiple" name="userNameMultiple" required /> <br/>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+</body>
+<script>
+    document.getElementById('singleImageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById('singleImage').files[0];
+        const userName = document.getElementById('userName').value;
+        formData.append('singleImage', fileInput);
+        formData.append('userName', userName);
+        fetch('/upload_single_image', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+          .then(result => alert(result))
+          .catch(error => console.error('Error:', error));
+    });
+
+    document.getElementById('multipleImageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById('multipleImage').files;
+        const userName = document.getElementById('userNameMultiple').value;
+        for (let i = 0; i < fileInput.length; i++) {
+            formData.append('multipleImage', fileInput[i]);
+        }
+        formData.append('userName', userName);
+        fetch('/upload_multiple_image', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+          .then(result => alert(result))
+          .catch(error => console.error('Error:', error));
+    });
+</script>
+</html>
