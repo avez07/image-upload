@@ -7,7 +7,7 @@ const app = express();
 // Load environment variables
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://aavez-786:aavez%4012345@cluster0.hae3fto.mongodb.net/imageUplaod', {
+mongoose.connect('/imageUplaod', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
